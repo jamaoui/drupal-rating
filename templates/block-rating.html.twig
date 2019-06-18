@@ -1,0 +1,74 @@
+{% set IS_HALF_STAR = data.IS_HALF_STAR %}
+{% set MAX_STARS = data.MAX_STARS %}
+
+{% set progress_bar = data.progress_bar %}
+{% set nbStars = data.nbStars|round(0,'floor') %}
+{% if IS_HALF_STAR %}
+    {% set MAX_STARS = MAX_STARS -1 %}
+{% endif %}
+
+{% set replaces_pattern = {
+    '{date}'  : "NOW"|date('d-m-Y'),
+} %}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-md-6 p-2">
+
+            <h2>{{ data.count }}
+                <small> {{ 'Votes'|t }}</small>
+            </h2>
+
+            <div class="stars">
+                {% if 1<nbStars %}
+                    {% for i in range(1,nbStars) %}
+                        {{ data.icons.star.full|raw }}
+                    {% endfor %}
+                {% endif %}
+
+                {% if IS_HALF_STAR %}
+                    {{ data.icons.star.half|raw }}
+                {% endif %}
+
+                {% if nbStars<MAX_STARS %}
+                    {% for i in range(nbStars+1,MAX_STARS) %}
+                        {{ data.icons.star.empty|raw }}
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+            {% if progress_bar %}
+                {% set bg_color = progress_bar.bg_color %}
+                {% if bg_color.primary %}
+                    {% set PrimaryBgColorCss = 'background-color:'~bg_color.primary~';' %}
+                {% endif %}
+                {% if bg_color.secondary %}
+                    {% set SecondaryBgColorCss = 'background-color:'~bg_color.secondary~';' %}
+                {% endif %}
+                <p> {{ 'Average'|t }}
+                <div class="progress" style="height: 1px;margin-bottom:5px;{{ SecondaryBgColorCss }}">
+                    <div class="progress-bar" role="progressbar"
+                         style="width: {{ progress_bar.avg }}%;{{ PrimaryBgColorCss }}"
+                         aria-valuenow="{{ progress_bar.avg }}"
+                         aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress" style="height: 20px;{{ SecondaryBgColorCss }}">
+                    <div class="progress-bar" role="progressbar"
+                         style="width: {{ progress_bar.avg }}%;{{ PrimaryBgColorCss }}"
+                         aria-valuenow="{{ progress_bar.avg }}"
+                         aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <strong>
+                    {{ data.nbStars|round(2,'ceil') }} / {{ data.MAX_STARS }}
+                    ({{ progress_bar.avg }}%)
+                </strong>
+                </p>
+                {{ progress_bar.extra_text.value|replace(replaces_pattern)|raw }}
+            {% endif %}
+
+            <hr>
+            {{ data.rating_form }}
+        </div>
+    </div>
+</div>

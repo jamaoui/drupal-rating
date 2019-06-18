@@ -1,0 +1,8 @@
+rating:
+  version: 1.x
+  js:
+    js/index.js: {}
+  css:
+    theme:
+      css/rating.css: {}
+

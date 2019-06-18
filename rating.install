@@ -1,0 +1,62 @@
+<?php
+/**
+* Implements hook_install().
+*
+* Creates some default entries on this module custom table.
+*
+* @see hook_install()
+*
+* @ingroup lotus
+*/
+    function rating_install() {
+
+    }
+
+/**
+* Implements hook_schema().
+*
+* Defines the database tables used by this module.
+*
+* @see hook_schema()
+*
+* @ingroup lotus
+*/
+    function rating_schema() {
+        $schema['rating'] = array(
+            'description' => 'Stores example person entries for demonstration purposes.',
+            'fields' => array(
+                'rid' => array(
+                    'type' => 'serial',
+                    'not null' => TRUE,
+                    'description' => 'Primary Key: Unique email ID.',
+                ),
+                'email' => array(
+                    'type' => 'varchar',
+                    'length' => 255,
+                    'not null' => TRUE,
+                    'description' => 'Email stored.',
+                ),
+                'uid' => array(
+                    'type' => 'int',
+                    'not null' => TRUE,
+                    'description' => 'User ID.',
+                ),
+                'nid' => array(
+                    'type' => 'int',
+                    'not null' => TRUE,
+                    'description' => 'Node ID.',
+                ),
+                'value' => array(
+                    'type' => 'float',
+                    'not null' => TRUE,
+                    'description' => 'Value.',
+                ),
+            ),
+            'primary key' => array('rid'),
+            'indexes' => array(
+                'email' => array('email'),
+            ),
+        );
+
+        return $schema;
+    }
