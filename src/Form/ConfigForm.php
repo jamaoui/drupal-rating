@@ -66,12 +66,6 @@ class ConfigForm extends ConfigFormBase {
       ],
 
     ];
-    $form['progress_bar']['progress_bar_extra_text'] = [
-      '#type' => 'text_format',
-      '#format' => 'full_html',
-      '#title' => $this->t('Extras Text (HTML)'),
-      '#default_value' => (isset($config->get('progress_bar_extra_text')['value']))?$config->get('progress_bar_extra_text')['value']:'',
-    ];
 
     $form['icons'] = [
       '#type' => 'details',
@@ -104,21 +98,9 @@ class ConfigForm extends ConfigFormBase {
       '#type' => 'number',
       '#title' => $this->t('Stars Number'),
       '#min' => '2',
-      '#max' => '5',
       '#default_value' => $max_stars,
     ];
-    $form['form']['inverse_showing_order'] = [
-      '#type' => 'radios',
-      '#title' => $this
-        ->t('Do you want to inverse the order of stars showing in rating form ?'),
-      '#default_value' => $config->get('inverse_showing_order'),
-      '#options' => [
-        0 => $this
-          ->t('No'),
-        1 => $this
-          ->t('Yes'),
-      ],
-    ];
+
     $stars = [];
     for ($i = 1; $i <= $max_stars; $i++) {
       $stars[$i] = $i;
@@ -127,7 +109,7 @@ class ConfigForm extends ConfigFormBase {
     $form['form']['rating_default_value'] = [
       '#type' => 'radios',
       '#title' => $this
-        ->t('Wish star will be the default rating value ?'),
+        ->t('Wich star will be the default rating value ?'),
       '#default_value' => (isset($rating_default_value) && $rating_default_value <= $max_stars) ? $rating_default_value : $max_stars,
       '#options' => $stars,
     ];
@@ -136,11 +118,11 @@ class ConfigForm extends ConfigFormBase {
       '#title' => t('Users'),
       '#open' => FALSE,
     ];
-    $form['users']['can_modify_rating'] = [
+    $form['users']['can_update_rating'] = [
       '#type' => 'radios',
       '#title' => $this
-        ->t('The users can modify their rating ?'),
-      '#default_value' => $config->get('can_modify_rating'),
+        ->t('The users can update their rating ?'),
+      '#default_value' => $config->get('can_update_rating'),
       '#options' => [
         0 => $this
           ->t('No'),
@@ -160,6 +142,17 @@ class ConfigForm extends ConfigFormBase {
           ->t('Yes'),
       ],
     ];
+    $form['advanced'] = [
+      '#type' => 'details',
+      '#title' => t('Advanced'),
+      '#open' => FALSE,
+    ];
+    $form['advanced']['extra_text'] = [
+      '#type' => 'text_format',
+      '#format' => 'full_html',
+      '#title' => $this->t('Extras Text (HTML)'),
+      '#default_value' => (isset($config->get('extra_text')['value'])) ? $config->get('extra_text')['value'] : '',
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -173,14 +166,13 @@ class ConfigForm extends ConfigFormBase {
       ->set('icon_star_full', $form_state->getValue('icon_star_full'))
       ->set('icon_star_half', $form_state->getValue('icon_star_half'))
       ->set('icon_star_empty', $form_state->getValue('icon_star_empty'))
-      ->set('inverse_showing_order', $form_state->getValue('inverse_showing_order'))
       ->set('rating_default_value', $form_state->getValue('rating_default_value'))
-      ->set('can_modify_rating', $form_state->getValue('can_modify_rating'))
+      ->set('can_update_rating', $form_state->getValue('can_update_rating'))
       ->set('can_delete_rating', $form_state->getValue('can_delete_rating'))
       ->set('display_progress_bar', $form_state->getValue('display_progress_bar'))
       ->set('progress_bar_primary_bgcolor', $form_state->getValue('progress_bar_primary_bgcolor'))
       ->set('progress_bar_secondary_bgcolor', $form_state->getValue('progress_bar_secondary_bgcolor'))
-      ->set('progress_bar_extra_text', $form_state->getValue('progress_bar_extra_text'))
+      ->set('extra_text', $form_state->getValue('extra_text'))
       ->save();
 
     parent::submitForm($form, $form_state);

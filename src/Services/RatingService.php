@@ -18,7 +18,7 @@ class RatingService implements IRating {
    */
   protected $database;
 
-  public $MAX_STARS = 5;
+  public $MAX_STARS;
 
   public $configFactory;
 
@@ -65,9 +65,12 @@ class RatingService implements IRating {
     if ($nid === NULL) {
       return NULL;
     }
-    $query = $this->database->query("SELECT nid FROM {rating} where uid={$uid} and nid={$nid}");
+    $query = $this->database->query("SELECT value FROM {rating} where uid={$uid} and nid={$nid}");
     $result = $query->fetchAssoc();
-    return $result !== FALSE ? reset($result) : NULL;
+    if (isset($result['value'])) {
+      return (float) $result['value'];
+    }
+    return FALSE;
   }
 
   /**
@@ -77,7 +80,7 @@ class RatingService implements IRating {
    *
    * @return \Drupal\Core\Database\StatementInterface|int|null
    */
-  public function setCurrentRating(AccountInterface $user, $nid, $value) {
+  public function insertCurrentRating(AccountInterface $user, $nid, $value) {
     $uid = $user->id();
     $email = $user->getEmail();
 
@@ -85,20 +88,37 @@ class RatingService implements IRating {
       return NULL;
     }
     try {
-      return $this->database->insert('rating')->fields([
-        'rid',
-        'email',
-        'uid',
-        'nid',
-        'value',
-      ], [
-          NULL,
-          $email,
-          $uid,
-          $nid,
-          $value,
+
+      return $this->database->insert('rating')->fields(
+        [
+          'email' => $email,
+          'uid' => $uid,
+          'nid' => $nid,
+          'value' => $value,
         ]
       )->execute();
+    } catch (\Exception $e) {
+      // TODO
+
+    }
+    return NULL;
+  }
+
+  public function updateCurrentRating(AccountInterface $user, $nid, $value) {
+    $uid = $user->id();
+    $email = $user->getEmail();
+
+    if ($nid === NULL) {
+      return NULL;
+    }
+    try {
+      return $this->database->update('rating')->fields([
+          'email' => $email,
+          'uid' => $uid,
+          'nid' => $nid,
+          'value' => $value,
+        ]
+      )->condition('uid', $uid)->condition('nid', $nid)->execute();
     } catch (\Exception $e) {
 
     }
@@ -155,7 +175,7 @@ class RatingService implements IRating {
   }
 
   /**
-   * @return int
+   * @return bool
    */
   public function isDisplayedProgressBarForm() {
     return (bool) $this->configData['display_progress_bar'];
@@ -174,8 +194,39 @@ class RatingService implements IRating {
   /**
    * @return string
    */
-  public function getProgressBarExtraText() {
-    return $this->configData['progress_bar_extra_text'];
+  public function getExtraText() {
+    return $this->configData['extra_text'];
+  }
+
+  /**
+   * @return bool
+   */
+  public function canDeleteRating() {
+    return (bool) $this->configData['can_delete_rating'];
+  }
+
+  /**
+   * @return bool
+   */
+  public function canUpdateRating() {
+    return (bool) $this->configData['can_update_rating'];
+  }
+
+  public function deleteUserRating(AccountInterface $user, $nid) {
+    $uid = $user->id();
+
+    if ($nid === NULL) {
+      return NULL;
+    }
+    try {
+      return $this->database->delete('rating')
+        ->condition('nid', $nid)
+        ->condition('uid', $uid)
+        ->execute();
+    } catch (\Exception $e) {
+
+    }
+    return NULL;
   }
 
 }

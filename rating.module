@@ -1,6 +1,7 @@
 <?php
 
 use \Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 use \Drupal\rating\Services\RatingService;
 
 /**

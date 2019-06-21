@@ -8,7 +8,9 @@ interface  IRating {
 
   public function deleteNodeRating($nid);
 
-  public function setCurrentRating(AccountInterface $user, $nid, $value);
+  public function insertCurrentRating(AccountInterface $user, $nid, $value);
+
+  public function updateCurrentRating(AccountInterface $user, $nid, $value);
 
   public function isUserRated(AccountInterface $user, $nid);
 
