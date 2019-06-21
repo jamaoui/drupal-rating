@@ -1,12 +1,4 @@
 # Static routes
-rating.rate:
-  path: '/rating/{nid}/{value}'
-  defaults:
-    _controller: '\Drupal\rating\Controller\RatingRoutingController::rate'
-    _title: 'Rate'
-  requirements:
-    _permission: 'access content'
-
 rating.settings:
   path: '/admin/structure/rating/settings'
   defaults:

@@ -1,0 +1,15 @@
+max_stars: '5'
+icon_star_full: '<span class="glyphicon glyphicon-star"></span>'
+icon_star_half: '<span class="glyphicon glyphicon-star half"></span>'
+icon_star_empty: '<span class="glyphicon glyphicon-star empty"></span>'
+rating_default_value: '1'
+can_modify_rating: null
+can_delete_rating: '1'
+display_progress_bar: '1'
+progress_bar_bgcolor: '#64b14e'
+progress_bar_primary_bgcolor: '#6647e2'
+progress_bar_secondary_bgcolor: '#f13d4f'
+can_update_rating: '1'
+extra_text:
+  value: "<p>lorem&nbsp;</p>\r\n\r\n<p>dada</p>\r\n\r\n<ul>\r\n\t<li>dadada</li>\r\n\t<li>{date}</li>\r\n</ul>\r\n"
+  format: full_html
