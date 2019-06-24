@@ -1,0 +1,5 @@
+drupal_rating.settings:
+  title: 'Rating config'
+  description: 'Drupal Rating Administratiion'
+  parent: system.admin_config
+  route_name: 'drupal_rating.settings'

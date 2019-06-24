@@ -1,0 +1,4 @@
+services:
+  drupal_rating:
+    class: Drupal\drupal_rating\Services\RatingService
+    arguments: ['@database','@config.factory']

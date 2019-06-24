@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\rating\Plugin\Block;
+namespace Drupal\drupal_rating\Plugin\Block;
 
 use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Block\Annotation\Block;
@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\rating\Services\RatingService;
+use Drupal\drupal_rating\Services\RatingService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
@@ -85,7 +85,7 @@ class RatingBlock extends BlockBase implements ContainerFactoryPluginInterface {
    */
   public function build() {
 
-    $RatingForm = $this->formBuilder->getForm('Drupal\rating\Form\RatingForm');
+    $RatingForm = $this->formBuilder->getForm('Drupal\drupal_rating\Form\RatingForm');
     $RatingService = $this->ratingService;
     $isUserRated = $RatingService->isUserRated($this->currentUser, $RatingService->getNodeId());
     $canDeleteRating = $RatingService->canDeleteRating();
@@ -122,9 +122,6 @@ class RatingBlock extends BlockBase implements ContainerFactoryPluginInterface {
     $PrimaryInput = $data['rating_form']['value'];
     $attachToJs = [
       'RatingBlock' => [
-        'currentData' => [
-
-        ],
         'form' => [
           'primaryInput' => [
             'name' => $PrimaryInput['#name'],
@@ -135,7 +132,6 @@ class RatingBlock extends BlockBase implements ContainerFactoryPluginInterface {
             'min' => $PrimaryInput['#min'],
             'class' => $PrimaryInput['#attributes']['class'],
           ],
-
         ],
         'permissions' => [
           'update' => $canUpdateRating,
@@ -156,7 +152,7 @@ class RatingBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#attached' => [
         'drupalSettings' => $attachToJs,
         'library' => [
-          'rating/rating',
+          'drupal_rating/drupal_rating',
         ],
       ],
     ];
@@ -171,7 +167,7 @@ class RatingBlock extends BlockBase implements ContainerFactoryPluginInterface {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('rating'),
+      $container->get('drupal_rating'),
       $container->get('form_builder'),
       $container->get('current_user')
     );

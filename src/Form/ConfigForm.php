@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * Contains \Drupal\rating\Form\RatingForm.
+ * Contains \Drupal\drupal_rating\Form\RatingForm.
  */
 
-namespace Drupal\rating\Form;
+namespace Drupal\drupal_rating\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -12,13 +12,13 @@ use Drupal\Core\Form\FormStateInterface;
 class ConfigForm extends ConfigFormBase {
 
   /** @var string Config settings */
-  const SETTINGS = 'rating.settings';
+  const SETTINGS = 'drupal_rating.settings';
 
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'rating_admin_settings';
+    return 'drupal_rating_admin_settings';
   }
 
   /**

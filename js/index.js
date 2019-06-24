@@ -5,7 +5,7 @@
       var $context = $(context);
       $context.find('input.form-rating-range', context).once('RatingBehavior').each(function () {
         var $RatingFormContext = $(context);
-
+        var userCurrentRating;
         var $RatingFormRangeContext = $(context);
         var RatingBlock = drupalSettings.RatingBlock;
         var primaryInputConfig = RatingBlock.form.primaryInput;
@@ -17,20 +17,16 @@
         else {
           primaryInputSelector = primaryInputConfig.type + '[name="' + primaryInputConfig.name + '"]';
         }
-
         var primaryInputDom = $RatingFormRangeContext.find(primaryInputSelector);
-
         var StarsContainer = $RatingFormRangeContext.find('.rating-stars-container');
         var StarIcons = RatingBlock.icons.star;
-
 
         var RatingModuleStarJS = Drupal.RatingModule.stars;
         var currentValues = {
           nbStars: RatingBlock.nbStars,
-          isUserRated: RatingBlock.isUserRated,
+          isUserRated: RatingBlock.isUserRated
         };
         var permissions = RatingBlock.permissions;
-
 
         var MAX_STARS = RatingBlock.MAX_STARS;
 
@@ -39,8 +35,13 @@
         var StarDataName = 'rating-star';
         var StepValue = primaryInputConfig.step;
 
-        var userCurrentRating = currentValues.isUserRated * MAX_STARS;
+        userCurrentRating = currentValues.isUserRated * MAX_STARS;
 
+        // Default Value of the html input if the user hasnt rating the current
+        // page
+        if (!userCurrentRating) {
+          userCurrentRating = primaryInputDom.val() * MAX_STARS;
+        }
         // Empty the container from stars
         StarsContainer.empty();
         for (var i = 0; i < MAX_STARS; i++) {
@@ -54,7 +55,7 @@
             star = RatingModuleStarJS.__prepareStar(StarIcons.empty, datas);
           }
           obj.html(star);
-          obj.click(function (e) {
+          obj.click(function () {
             primaryInputDom.form().submit();
           });
           StarsContainer.append(obj);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\rating\Interfaces;
+namespace Drupal\drupal_rating\Interfaces;
 
 use Drupal\Core\Session\AccountInterface;
 
@@ -23,8 +23,6 @@ interface  IRating {
   public function getStarsIcons();
 
   public function getMaxStars();
-
-  public function isInversedRatingForm();
 
   public function getRatingDefaultValue();
 }

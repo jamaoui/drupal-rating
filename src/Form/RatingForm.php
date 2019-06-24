@@ -1,17 +1,17 @@
 <?php
 /**
  * @file
- * Contains \Drupal\rating\Form\RatingForm.
+ * Contains \Drupal\drupal_rating\Form\RatingForm.
  */
 
-namespace Drupal\rating\Form;
+namespace Drupal\drupal_rating\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\rating\Services\RatingService;
+use Drupal\drupal_rating\Services\RatingService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -35,7 +35,7 @@ class RatingForm extends ConfigFormBase {
    * {@inheritdoc}.
    */
   public function getFormID() {
-    return 'rating_form';
+    return 'drupal_rating_form';
   }
 
   /**
@@ -77,12 +77,6 @@ class RatingForm extends ConfigFormBase {
         }
       }
     }
-
-    // Test if the default value of the rating form stars is reverted for reversing the array and the stars order
-    if ($ratingService->isInversedRatingForm()) {
-      $stars = array_reverse($stars);
-    }
-
     // Test the default value of the stars form
     if (isset($userRatingKey)) {
       $ratingDefaultKey = $userRatingKey;
@@ -99,8 +93,7 @@ class RatingForm extends ConfigFormBase {
     }
     $form['value'] = [
       '#type' => 'hidden',
-      //'#options' => $stars,
-      //'#default_value' => $ratingDefaultKey,
+      '#default_value' => $ratingDefaultKey,
       '#title' => $this->t('Your Vote'),
       '#min' => 0,
       '#max' => 1,
@@ -156,10 +149,10 @@ class RatingForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    /*$value = $form_state->getValue('value');
+    $value = $form_state->getValue('value');
     if ($value < 0 || $value > 1) {
       $form_state->setErrorByName('value', t('The vote value is not valid. Please enter valid value.'));
-    }*/
+    }
   }
 
   /**
@@ -192,7 +185,6 @@ class RatingForm extends ConfigFormBase {
             $ratingService->updateCurrentRating($this->currentUser, $nid, $value);
           }
           else {
-            //TODO The user can't Update (LOG,BAN)
             $this->messenger->addError($this->t('You have already voted'));
           }
         }
@@ -210,7 +202,7 @@ class RatingForm extends ConfigFormBase {
    */
   protected function getEditableConfigNames() {
     return [
-      'rating.settings',
+      'drupal_rating.settings',
     ];
   }
 
@@ -220,7 +212,7 @@ class RatingForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('rating'),
+      $container->get('drupal_rating'),
       $container->get('messenger'),
       $container->get('current_user')
     );

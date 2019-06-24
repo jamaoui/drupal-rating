@@ -1,0 +1,6 @@
+name: Drupal Rating
+package: Rating
+type: module
+description: 'Rating...'
+core: 8.x
+configure: drupal_rating.settings

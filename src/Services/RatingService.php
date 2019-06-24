@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\rating\Services;
+namespace Drupal\drupal_rating\Services;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
-use Drupal\rating\Interfaces\IRating;
+use Drupal\drupal_rating\Interfaces\IRating;
 
 /**
  * Class RatingService.
@@ -24,7 +24,7 @@ class RatingService implements IRating {
 
   private $configData;
 
-  const SETTINGS = 'rating.settings';
+  const SETTINGS = 'drupal_rating.settings';
 
   /**
    * Constructs a new object.
@@ -56,7 +56,7 @@ class RatingService implements IRating {
   }
 
   public function getCurrentRating($nid) {
-    $query = $this->database->query("SELECT count(nid) as 'count',avg(value) as 'avg' FROM {rating} where nid={$nid}");
+    $query = $this->database->query("SELECT count(nid) as 'count',avg(value) as 'avg' FROM {drupal_rating} where nid={$nid}");
     return $query->fetchAssoc();
   }
 
@@ -65,7 +65,7 @@ class RatingService implements IRating {
     if ($nid === NULL) {
       return NULL;
     }
-    $query = $this->database->query("SELECT value FROM {rating} where uid={$uid} and nid={$nid}");
+    $query = $this->database->query("SELECT value FROM {drupal_rating} where uid={$uid} and nid={$nid}");
     $result = $query->fetchAssoc();
     if (isset($result['value'])) {
       return (float) $result['value'];
@@ -89,7 +89,7 @@ class RatingService implements IRating {
     }
     try {
 
-      return $this->database->insert('rating')->fields(
+      return $this->database->insert('drupal_rating')->fields(
         [
           'email' => $email,
           'uid' => $uid,
@@ -112,7 +112,7 @@ class RatingService implements IRating {
       return NULL;
     }
     try {
-      return $this->database->update('rating')->fields([
+      return $this->database->update('drupal_rating')->fields([
           'email' => $email,
           'uid' => $uid,
           'nid' => $nid,
@@ -130,7 +130,7 @@ class RatingService implements IRating {
       return NULL;
     }
     try {
-      return $this->database->delete('rating')
+      return $this->database->delete('drupal_rating')
         ->condition('nid', $nid)
         ->execute();
     } catch (\Exception $e) {
@@ -152,13 +152,6 @@ class RatingService implements IRating {
    */
   public function getMaxStars() {
     return (int) $this->configData['max_stars'];
-  }
-
-  /**
-   * @return bool
-   */
-  public function isInversedRatingForm() {
-    return (bool) $this->configData['inverse_showing_order'];
   }
 
   /**
@@ -219,7 +212,7 @@ class RatingService implements IRating {
       return NULL;
     }
     try {
-      return $this->database->delete('rating')
+      return $this->database->delete('drupal_rating')
         ->condition('nid', $nid)
         ->condition('uid', $uid)
         ->execute();
