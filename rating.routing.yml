@@ -1,8 +1,0 @@
-# Static routes
-rating.settings:
-  path: '/admin/structure/rating/settings'
-  defaults:
-    _form: '\Drupal\rating\Form\ConfigForm'
-    _title: 'Configuration Rating Module'
-  requirements:
-    _permission: 'administer site configuration'
